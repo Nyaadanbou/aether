@@ -1,0 +1,71 @@
+services:
+
+  redis:
+    image: redis:latest
+    container_name: aether-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - ./redis/data:/data
+      - ./redis/conf:/usr/local/etc/redis:ro
+    networks:
+      - aether
+
+  mariadb:
+    image: mariadb:latest
+    container_name: aether-mariadb
+    restart: unless-stopped
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: bridge
+    volumes:
+      - ./mariadb/data:/var/lib/mysql
+      - ./mariadb/conf/my.cnf:/etc/mysql/conf.d/my.cnf:ro
+      - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - aether
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: aether-pma
+    restart: unless-stopped
+    ports:
+      - "8765:80"
+    depends_on:
+      - mariadb
+    volumes:
+      - ./phpmyadmin/conf/config.inc.php:/etc/phpmyadmin/config.inc.php:ro
+    networks:
+      - aether
+
+  minecraft:
+    build:
+      context: ./minecraft
+      args:
+        # 用于 amd64 架构的 JDK, 按需修改
+        JDK_AMD64_URL: https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk-21.0.6-linux-x64-b872.85.tar.gz
+        # 用于 arm64 架构的 JDK, 按需修改
+        JDK_ARM64_URL: https://cache-redirector.jetbrains.com/intellij-jbr/jbrsdk-21.0.6-linux-aarch64-b872.85.tar.gz
+    image: aether-minecraft:latest
+    container_name: aether-mc
+    ports:
+      - "30000:25565" # router
+      - "30001:25566" # proxy
+      - "7270:7270" # resourcepack server
+      - "10005:10005" # jdwp for router
+      - "10006:10006" # jdwp for proxy
+      - "11005:11005" # jdwp for game1
+      - "11006:11006" # jdwp for game2
+      - "11007:11007" # jdwp for game3
+      - "11008:11008" # jdwp for game4
+    depends_on:
+      - redis
+      - mariadb
+    volumes:
+      - ./minecraft/app:/minecraft
+    networks:
+      - aether
+
+networks:
+  aether:
+    driver: bridge

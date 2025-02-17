@@ -1,0 +1,46 @@
+FROM ubuntu:noble
+
+ARG TARGETPLATFORM
+ARG JDK_AMD64_URL
+ARG JDK_ARM64_URL
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+  curl \
+  jq \
+  tar \
+  unzip \
+  tmux \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /opt/jdk && \
+  if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
+  curl -L $JDK_AMD64_URL -o /tmp/jbrsdk-x64.tar.gz && \
+  tar -xzf /tmp/jbrsdk-x64.tar.gz -C /opt/jdk --strip-components=1 && \
+  rm /tmp/jbrsdk-x64.tar.gz; \
+  elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
+  curl -L $JDK_ARM64_URL -o /tmp/jbrsdk-arm64.tar.gz && \
+  tar -xzf /tmp/jbrsdk-arm64.tar.gz -C /opt/jdk --strip-components=1 && \
+  rm /tmp/jbrsdk-arm64.tar.gz; \
+  else \
+  echo "Unsupported architecture: $TARGETPLATFORM" 1>&2; \
+  exit 1; \
+  fi
+
+ENV JAVA_HOME=/opt/jdk
+ENV PATH=$JAVA_HOME/bin:$PATH
+RUN java -version
+
+RUN mkdir -p /minecraft
+WORKDIR /minecraft
+EXPOSE 7270
+EXPOSE 25565
+EXPOSE 25566
+EXPOSE 10005
+EXPOSE 10006
+EXPOSE 11005
+EXPOSE 11006
+EXPOSE 11007
+
+# 保持容器运行
+CMD ["tail", "-f", "/dev/null"]
