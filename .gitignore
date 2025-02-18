@@ -1,6 +1,7 @@
 /data
 
 /mariadb/data
+/mongodb/data
 /redis/data
 
 minecraft/app/game*/cache

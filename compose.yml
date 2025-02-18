@@ -1,18 +1,19 @@
 services:
 
   redis:
-    image: redis:latest
+    build: ./redis
+    image: aether-redis:latest
     container_name: aether-redis
     restart: unless-stopped
-    command: redis-server --appendonly yes
+    command: redis-server /usr/local/etc/redis/redis.conf
     volumes:
       - ./redis/data:/data
-      - ./redis/conf:/usr/local/etc/redis:ro
     networks:
       - aether
 
   mariadb:
-    image: mariadb:latest
+    build: ./mariadb
+    image: aether-mariadb:latest
     container_name: aether-mariadb
     restart: unless-stopped
     environment:
@@ -20,21 +21,28 @@ services:
       MYSQL_DATABASE: bridge
     volumes:
       - ./mariadb/data:/var/lib/mysql
-      - ./mariadb/conf/my.cnf:/etc/mysql/conf.d/my.cnf:ro
-      - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     networks:
       - aether
 
   phpmyadmin:
-    image: phpmyadmin:latest
+    build: ./phpmyadmin
+    image: aether-pma:latest
     container_name: aether-pma
     restart: unless-stopped
     ports:
       - "8765:80"
     depends_on:
       - mariadb
+    networks:
+      - aether
+
+  mongodb:
+    build: ./mongodb
+    image: aether-mongodb:latest
+    container_name: aether-mongodb
+    restart: unless-stopped
     volumes:
-      - ./phpmyadmin/conf/config.inc.php:/etc/phpmyadmin/config.inc.php:ro
+      - ./mongodb/data:/data/db
     networks:
       - aether
 
