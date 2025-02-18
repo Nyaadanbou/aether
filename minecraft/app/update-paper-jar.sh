@@ -5,9 +5,9 @@ TARGET_DIRS=("game1" "game2" "game3" "game4")
 # Paper 版本号
 PAPER_VERSION="1.21.3"
 # 临时文件夹
-TEMP_DIR=$(dirname "$0")/tmp
+TEMP_DIR=/minecraft/tmp
 
-source $(dirname "$0")/shared-functions.sh
+source /minecraft/shared-functions.sh
 
 # 下载一次 JAR 文件
 download_server_jar "paper" "$PAPER_VERSION" "$TEMP_DIR"

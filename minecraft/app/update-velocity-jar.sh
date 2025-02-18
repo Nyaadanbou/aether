@@ -5,9 +5,9 @@ TARGET_DIRS=("proxy" "router")
 # Velocity 版本号
 VELOCITY_VERSION="3.4.0-SNAPSHOT"
 # 临时文件夹
-TEMP_DIR=$(dirname "$0")/tmp
+TEMP_DIR=/minecraft/tmp
 
-source $(dirname "$0")/shared-functions.sh
+source /minecraft/shared-functions.sh
 
 # 下载一次 JAR 文件
 download_server_jar "velocity" "$VELOCITY_VERSION" "$TEMP_DIR"
