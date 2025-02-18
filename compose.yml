@@ -30,7 +30,7 @@ services:
     container_name: aether-pma
     restart: unless-stopped
     ports:
-      - "8765:80"
+      - "51234:80"
     depends_on:
       - mariadb
     networks:
@@ -69,6 +69,7 @@ services:
     depends_on:
       - redis
       - mariadb
+      - mongodb
     volumes:
       - ./minecraft/app:/minecraft
     networks:
