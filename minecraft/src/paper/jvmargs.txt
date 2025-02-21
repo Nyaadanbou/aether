@@ -1,0 +1,52 @@
+# Process name
+-DminecraftServer=paper-unnamed
+
+# Memory
+-Xms2G
+-Xmx2G
+
+# Remote debug
+-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:11005
+-XX:NonProfiledCodeHeapSize=128M
+-XX:+AllowEnhancedClassRedefinition
+-Xlog:redefine+class*=info
+
+# Akira flags
+-XX:+UseG1GC
+-XX:+ParallelRefProcEnabled
+-XX:MaxGCPauseMillis=200
+-XX:+UnlockExperimentalVMOptions
+-XX:+DisableExplicitGC
+-XX:+AlwaysPreTouch
+-XX:G1HeapWastePercent=5
+-XX:G1MixedGCCountTarget=4
+-XX:G1MixedGCLiveThresholdPercent=90
+-XX:G1RSetUpdatingPauseTimePercent=5
+-XX:SurvivorRatio=32
+-XX:+PerfDisableSharedMem
+-XX:MaxTenuringThreshold=1
+-Dusing.aikars.flags=https://mcflags.emc.gs
+-Daikars.new.flags=true
+-XX:G1NewSizePercent=30
+-XX:G1MaxNewSizePercent=40
+-XX:G1HeapRegionSize=8M
+-XX:G1ReservePercent=20
+-XX:InitiatingHeapOccupancyPercent=15
+
+# Extra opens
+--add-opens java.base/java.lang=ALL-UNNAMED
+--add-opens java.base/java.lang.reflect=ALL-UNNAMED
+--add-opens java.base/java.util=ALL-UNNAMED
+--add-opens java.base/jdk.internal.misc=ALL-UNNAMED
+--add-opens java.base/jdk.internal.reflect=ALL-UNNAMED
+
+# Java system properties
+-Djava.net.preferIPv4Stack=true
+
+# Ignite system properties
+-Dignite.locator=paper
+-Dignite.paper.jar=./paper.jar
+
+# Paper system properties
+-Ddisable.watchdog=true
+-Dpaper.playerconnection.keepalive=86400000

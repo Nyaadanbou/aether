@@ -1,0 +1,30 @@
+FROM nailm/aether-java:21
+
+# 注意里最后把默认 shell 改成了 bash, 这样使用 dev containers 进入 terminal 时就会使用 bash 而不是 sh
+RUN groupadd -r minecraft && useradd -r -g minecraft -d /minecraft -s /bin/bash minecraft
+RUN mkdir -p /minecraft && chown -R minecraft:minecraft /minecraft
+WORKDIR /minecraft
+
+# 将容器用户切换到 minecraft
+USER minecraft
+
+# resourcepack server
+EXPOSE 7270
+
+# router server
+EXPOSE 25565
+
+# proxy server
+EXPOSE 25566
+
+# remote debug for velocity severs
+EXPOSE 10005
+EXPOSE 10006
+
+# remote debug for paper servers
+EXPOSE 11005
+EXPOSE 11006
+EXPOSE 11007
+EXPOSE 11008
+EXPOSE 11009
+EXPOSE 11010

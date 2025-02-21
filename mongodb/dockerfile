@@ -1,0 +1,3 @@
+FROM mongo:7
+
+COPY conf/mongod.conf /etc/mongod.conf

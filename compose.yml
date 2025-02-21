@@ -1,0 +1,79 @@
+networks:
+  aether:
+    driver: bridge
+
+volumes:
+  redis: {}
+  mariadb: {}
+  phpmyadmin: {}
+  mongodb: {}
+  minecraft: {}
+
+services:
+
+  redis:
+    build: ./redis
+    image: nailm/aether-redis:latest
+    restart: unless-stopped
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - redis:/data
+    networks:
+      - aether
+
+  mariadb:
+    build: ./mariadb
+    image: nailm/aether-mariadb:latest
+    restart: unless-stopped
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: bridge
+    volumes:
+      - mariadb:/var/lib/mysql
+    networks:
+      - aether
+
+  phpmyadmin:
+    build: ./phpmyadmin
+    image: nailm/aether-phpmyadmin:latest
+    restart: unless-stopped
+    ports:
+      - "51234:80"
+    depends_on:
+      - mariadb
+    networks:
+      - aether
+
+  # mongodb:
+  #   build: ./mongodb
+  #   image: nailm/aether-mongodb:latest
+  #   restart: unless-stopped
+  #   volumes:
+  #     - mongodb:/data/db
+  #   networks:
+  #     - aether
+
+  minecraft:
+    build: ./minecraft
+    image: nailm/aether-minecraft:latest
+    command: sleep infinity
+    ports:
+      - "30000:25565" # router
+      - "30001:25566" # proxy
+      - "7270:7270" # resourcepack server
+      - "10005:10005" # jdwp for router
+      - "10006:10006" # jdwp for proxy
+      - "11005:11005" # jdwp for game1
+      - "11006:11006" # jdwp for game2
+      - "11007:11007" # jdwp for game3
+      - "11008:11008" # jdwp for game4
+      - "11008:11009" # jdwp for game5
+      - "11008:11010" # jdwp for game6
+    depends_on:
+      - redis
+      - mariadb
+      # - mongodb
+    volumes:
+      - minecraft:/minecraft
+    networks:
+      - aether
