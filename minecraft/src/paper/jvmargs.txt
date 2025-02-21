@@ -1,12 +1,15 @@
 # Process name
+# 修改这里的名字!
 -DminecraftServer=paper-unnamed
 
 # Memory
+# 修改这里的内存!
 -Xms2G
 -Xmx2G
 
 # Remote debug
--agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:11005
+# 修改这里的端口!
+-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
 -XX:NonProfiledCodeHeapSize=128M
 -XX:+AllowEnhancedClassRedefinition
 -Xlog:redefine+class*=info
