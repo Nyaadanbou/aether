@@ -1,4 +1,4 @@
-## 容器结构
+## 容器概览
 
 本项目使用 Docker Compose 部署多个容器 (containers):
 
@@ -8,7 +8,7 @@
 - `redis` - Redis 数据库容器
 - `minecraft` - Minecraft 服务端容器
 
-并且会创建以下卷 (volumes) 用于持久化数据:
+并且会创建以下卷 (volumes) 用于持久化容器产生的数据:
 
 - `aether_mongodb`
 - `aether_mariadb`
@@ -35,15 +35,16 @@
 
 ## 启动所有容器
 
-前置要求: 请确保您的电脑上已安装 [Docker Desktop](https://www.docker.com/products/docker-desktop).
+**前置要求:** 请确保您的电脑上已安装 [Docker Desktop](https://www.docker.com/products/docker-desktop).
 
-1. 使用 Visual Studio Code 打开本项目.
-2. 打开 `compose.yml` 文件.
+1. 使用 [Visual Studio Code](https://code.visualstudio.com/) 打开本项目.
+2. 安装 VSCode 插件: [Docker](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-docker) 和 [Remote Development](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack).
+2. 打开 `./compose.yml` 文件.
 3. 点击 `services` 节点上方由 VSCode 生成的 `[➔ Run All Services]` 按钮.
 
 ## 进入 Minecraft 容器
 
-前置要求: 请确保您的 VSCode 已安装插件 [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
+**前置要求:** 请确保您的 VSCode 已安装插件 [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers).
 
 下面运行的脚本实际上是使用 *Dev Containers* 进入 Minecraft 容器.
 如果进入成功, 您就可以通过 VSCode 直接操作容器内的文件和使用命令行.
@@ -91,7 +92,7 @@
 
 考虑到这些东西都比较基础, 这里不再介绍详细用法, 平日的语音里会做详细说明.
 
-## 使用 tmux 操作服务端控制台
+## 使用 tmux 操作控制台
 
 如果您使用的是本项目提供的 `go.sh` 脚本启动服务端, 执行后会启动一个 `tmux` 会话, 相当于一个新的窗口, 负责运行当前的服务端. `tmux` 的作用是允许您将程序放在“后台”运行, 并且可以随时进入查看和操作.
 
@@ -107,3 +108,24 @@
 要重新进入一个服务端的 `tmux` 会话, 在对应的目录里再次执行 `./go.sh` 即可.
 
 更多关于 `tmux` 的使用方法请参考: [Tmux Cheat Sheet](https://tmuxcheatsheet.com/)
+
+## 数据库身份验证 (Credentials)
+
+MongoDB 数据库:
+
+- host: `mongodb`
+- port: `27017`
+
+MariaDB 数据库:
+(管理面板 [phpMyAdmin](http://localhost:51234))
+
+- host: `mariadb`
+- port: `3306`
+- user: `minecraft`
+- pass: `A123456789a`
+
+Redis 数据库:
+
+- host: `redis`
+- port: `6379`
+- pass: (无)
