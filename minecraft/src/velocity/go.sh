@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 修改这里的名字!
-SERVER=unnamed
+SERVER=velocity-unnamed
 
 tmux has-session -t $SERVER 2>/dev/null
 

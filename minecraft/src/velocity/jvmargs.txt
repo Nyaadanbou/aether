@@ -1,9 +1,19 @@
--agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:10005
+# 修改这里的名字!
+# Process name
+-DminecraftServer=velocity-unnamed
 
+# 修改这里的内存!
+# Memory
 -Xms128M
 -Xmx128M
 
--DminecraftServer=velocity-unnamed
+# 修改这里的端口!
+# Remote debug
+-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+-XX:NonProfiledCodeHeapSize=128M
+-XX:+AllowEnhancedClassRedefinition
+-Xlog:redefine+class*=info
+
 -Djava.net.preferIPv4Stack=true
 
 -XX:+UseG1GC
