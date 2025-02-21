@@ -67,8 +67,8 @@ services:
       - "11006:11006" # jdwp for game2
       - "11007:11007" # jdwp for game3
       - "11008:11008" # jdwp for game4
-      - "11008:11009" # jdwp for game5
-      - "11008:11010" # jdwp for game6
+      - "11009:11009" # jdwp for game5
+      - "11010:11010" # jdwp for game6
     depends_on:
       - redis
       - mariadb
