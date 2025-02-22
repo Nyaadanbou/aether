@@ -3,6 +3,8 @@ FROM nailm/aether-java:21
 # 注意里最后把默认 shell 改成了 bash, 这样使用 dev containers 进入 terminal 时就会使用 bash 而不是 sh
 RUN groupadd -r minecraft && useradd -r -g minecraft -d /minecraft -s /bin/bash minecraft
 RUN mkdir -p /minecraft && chown -R minecraft:minecraft /minecraft
+RUN mkdir -p /minecraft/www && chown -R minecraft:minecraft /minecraft/www
+
 WORKDIR /minecraft
 
 # 将容器用户切换到 minecraft

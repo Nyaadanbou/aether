@@ -8,6 +8,7 @@ volumes:
   phpmyadmin: {}
   mongodb: {}
   minecraft: {}
+  nginx: {}
 
 services:
 
@@ -18,6 +19,8 @@ services:
     command: redis-server /usr/local/etc/redis/redis.conf
     volumes:
       - redis:/data
+    environment:
+      - TZ=Asia/Shanghai
     networks:
       - aether
 
@@ -28,6 +31,7 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
       MYSQL_DATABASE: bridge
+      TZ: Asia/Shanghai
     volumes:
       - mariadb:/var/lib/mysql
     networks:
@@ -41,6 +45,8 @@ services:
       - "51234:80"
     depends_on:
       - mariadb
+    environment:
+      - TZ=Asia/Shanghai
     networks:
       - aether
 
@@ -50,8 +56,36 @@ services:
   #   restart: unless-stopped
   #   volumes:
   #     - mongodb:/data/db
+  #   environment:
+  #     - TZ=Asia/Shanghai
   #   networks:
   #     - aether
+
+  php-fpm:
+    build: ./php-fpm
+    image: nailm/aether-php-fpm:latest
+    restart: unless-stopped
+    volumes:
+      - nginx:/var/www
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - aether
+
+  nginx:
+    build: ./nginx
+    image: nailm/aether-nginx:latest
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - nginx:/var/www
+    depends_on:
+      - php-fpm
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - aether
 
   minecraft:
     build: ./minecraft
@@ -69,11 +103,15 @@ services:
       - "11008:11008" # jdwp for game4
       - "11009:11009" # jdwp for game5
       - "11010:11010" # jdwp for game6
+    volumes:
+      - minecraft:/minecraft
+      - nginx:/minecraft/www # 和 nginx 共用一个 volume, 这样 minecraft 服务端就可以读写网页文件
     depends_on:
+      - nginx
       - redis
       - mariadb
       # - mongodb
-    volumes:
-      - minecraft:/minecraft
+    environment:
+      - TZ=Asia/Shanghai
     networks:
       - aether

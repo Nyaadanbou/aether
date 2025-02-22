@@ -1,0 +1,10 @@
+FROM php:8.2-fpm
+
+# 给这个 php 镜像装 php 扩展是真特么麻烦
+# 我们使用这个项目来安装: https://github.com/mlocati/docker-php-extension-installer
+RUN ( curl -sSLf https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions -o - || echo 'return 1' ) | sh -s \
+    # 这里写要安装的 php 扩展名, 空格分隔
+    gd pdo_mysql zip
+
+RUN rm -rf /var/www/html
+WORKDIR /var/www
