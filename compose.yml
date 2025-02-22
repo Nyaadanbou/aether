@@ -95,14 +95,14 @@ services:
       - "30000:25565" # router
       - "30001:25566" # proxy
       - "7270:7270" # resourcepack server
-      - "10005:10005" # jdwp for router
-      - "10006:10006" # jdwp for proxy
-      - "11005:11005" # jdwp for game1
-      - "11006:11006" # jdwp for game2
-      - "11007:11007" # jdwp for game3
-      - "11008:11008" # jdwp for game4
-      - "11009:11009" # jdwp for game5
-      - "11010:11010" # jdwp for game6
+      - "40005:40005" # jdwp for router
+      - "40006:40006" # jdwp for proxy
+      - "41005:41005" # jdwp for game1
+      - "41006:41006" # jdwp for game2
+      - "41007:41007" # jdwp for game3
+      - "41008:41008" # jdwp for game4
+      - "41009:41009" # jdwp for game5
+      - "41010:41010" # jdwp for game6
     volumes:
       - minecraft:/minecraft
       - nginx:/minecraft/www # 和 nginx 共用一个 volume, 这样 minecraft 服务端就可以读写网页文件
