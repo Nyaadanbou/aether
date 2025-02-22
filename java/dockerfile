@@ -5,12 +5,17 @@ ARG JDK_AMD64_URL
 ARG JDK_ARM64_URL
 ENV DEBIAN_FRONTEND=noninteractive
 
+# 基于 WSL2 的 Docker 必须安装 libxext6 libxrender1 libxtst6 libxi6
 RUN apt-get update && apt-get install -y \
   curl \
   jq \
   tar \
   unzip \
   tmux \
+  libxext6 \
+  libxrender1 \
+  libxtst6 \
+  libxi6 \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /opt/jdk && \
