@@ -19,6 +19,9 @@ EXPOSE 25565
 # proxy server
 EXPOSE 25566
 
+# voicechat
+EXPOSE 25566/udp
+
 # remote debug for velocity severs
 EXPOSE 10005
 EXPOSE 10006
