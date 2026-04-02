@@ -24,11 +24,11 @@ RUN apt-get update && apt-get install -y \
 
 RUN mkdir -p /opt/jdk && \
   if [ "$TARGETPLATFORM" = "linux/amd64" ]; then \
-  curl -L $JDK_AMD64_URL -o /tmp/jdk-x64.tar.gz && \
+  curl -L --http1.1 $JDK_AMD64_URL -o /tmp/jdk-x64.tar.gz && \
   tar -xzf /tmp/jdk-x64.tar.gz -C /opt/jdk --strip-components=1 && \
   rm /tmp/jdk-x64.tar.gz; \
   elif [ "$TARGETPLATFORM" = "linux/arm64" ]; then \
-  curl -L $JDK_ARM64_URL -o /tmp/jdk-arm64.tar.gz && \
+  curl -L --http1.1 $JDK_ARM64_URL -o /tmp/jdk-arm64.tar.gz && \
   tar -xzf /tmp/jdk-arm64.tar.gz -C /opt/jdk --strip-components=1 && \
   rm /tmp/jdk-arm64.tar.gz; \
   else \
