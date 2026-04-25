@@ -1,5 +1,10 @@
 -- 该用户给各服务使用
 CREATE USER IF NOT EXISTS 'minecraft'@'%' IDENTIFIED BY 'A123456789a';
+
+-- mysqld_exporter 监控用户
+CREATE USER IF NOT EXISTS 'exporter'@'%' IDENTIFIED BY 'exporter_pass';
+GRANT PROCESS, REPLICATION CLIENT, SELECT ON *.* TO 'exporter'@'%';
+FLUSH PRIVILEGES;
 GRANT ALL PRIVILEGES ON *.* TO 'minecraft'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
 

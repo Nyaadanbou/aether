@@ -9,6 +9,8 @@ volumes:
   mongodb: {}
   minecraft: {}
   nginx: {}
+  prometheus: {}
+  grafana: {}
 
 services:
 
@@ -86,6 +88,64 @@ services:
       - TZ=Asia/Shanghai
     networks:
       - aether
+
+  mysqld_exporter:
+    image: prom/mysqld-exporter:latest
+    restart: unless-stopped
+    volumes:
+      - ./mysqld_exporter/.my.cnf:/etc/.my.cnf:ro
+    command:
+      - --config.my-cnf=/etc/.my.cnf
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - aether
+    depends_on:
+      - mariadb
+
+  redis_exporter:
+    image: oliver006/redis_exporter:latest
+    restart: unless-stopped
+    environment:
+      - REDIS_ADDR=redis://redis:6379
+      - TZ=Asia/Shanghai
+    networks:
+      - aether
+    depends_on:
+      - redis
+
+  prometheus:
+    image: prom/prometheus:latest
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus:/prometheus
+    ports:
+      - "10800:9090"
+    environment:
+      - TZ=Asia/Shanghai
+    networks:
+      - aether
+    depends_on:
+      - mysqld_exporter
+      - redis_exporter
+
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    volumes:
+      - grafana:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "10801:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=A123456789a
+      - TZ=Asia/Shanghai
+    networks:
+      - aether
+    depends_on:
+      - prometheus
 
   minecraft:
     build: ./minecraft
